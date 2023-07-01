@@ -17,7 +17,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 
 import { useState } from "react";
 
-function Add() {
+function AddPage() {
   // const [submittedValues, setSubmittedValues] = useState("");
   const [visible, setVisible] = useState(false);
   const [displayUserMsg, setDisplayUserMsg] = useState({
@@ -194,4 +194,4 @@ function Add() {
   );
 }
 
-export default Add;
+export default AddPage;
