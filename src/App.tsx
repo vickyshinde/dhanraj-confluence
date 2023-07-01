@@ -1,6 +1,6 @@
-import { Title, Space } from "@mantine/core";
+import { Outlet } from "react-router-dom";
+import { Title } from "@mantine/core";
 import "./App.css";
-import AddPage from "./components/addPage";
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       <Title mt="xl" maw={400} mx="auto">
         Welcome to Confluence!
       </Title>
-      <AddPage />
+      <Outlet />
     </>
   );
 }
