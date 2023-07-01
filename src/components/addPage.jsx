@@ -25,8 +25,6 @@ function AddPage() {
     msg: "",
   });
 
-  console.log(displayUserMsg);
-
   const addRecord = (newEntry) => {
     const url = "http://localhost:4040/lists";
     // console.log(newUser);
@@ -49,13 +47,13 @@ function AddPage() {
     },
 
     validate: {
-      product: isNotEmpty("Enter your product"),
-      components: isNotEmpty("Enter your components"),
-      category: isNotEmpty("Enter your category"),
-      type: isNotEmpty("Enter your type"),
-      topic: isNotEmpty("Enter your topic"),
-      description: isNotEmpty("Enter your description"),
-      docUrl: isNotEmpty("Enter your docUrl"),
+      product: isNotEmpty("Enter product"),
+      components: isNotEmpty("Enter components"),
+      category: isNotEmpty("Enter category"),
+      type: isNotEmpty("Enter type"),
+      topic: isNotEmpty("Enter topic"),
+      description: isNotEmpty("Enter description"),
+      docUrl: isNotEmpty("Enter docUrl"),
     },
 
     transformValues: (values) => ({

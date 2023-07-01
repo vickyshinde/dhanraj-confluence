@@ -1,10 +1,24 @@
-import { Box, Table, LoadingOverlay, Pagination } from "@mantine/core";
+import {
+  Box,
+  Table,
+  LoadingOverlay,
+  Pagination,
+  Card,
+  Text,
+  Button,
+  useMantineTheme,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
+import { ExternalLink } from "tabler-icons-react";
 
 const ListingPage = () => {
+  const theme = useMantineTheme();
+
+  const secondaryColor =
+    theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.gray[7];
   const [visible, setVisible] = useState(false);
   const [recordList, setRecordList] = useState([]);
-  const [totalCount, setTotalCount] = useState([]);
+  // const [totalCount, setTotalCount] = useState([]);
   const [perPageCount, setPerPageCount] = useState([]);
   const [apiError, setApiError] = useState("");
   const [controller, setController] = useState({
@@ -23,31 +37,30 @@ const ListingPage = () => {
     return fetch(url);
   };
 
-  const getData = async () => {
-    try {
-      setVisible(true);
-      const response = await getRecordList(controller);
-      // console.log(response);
-      if (!response.ok)
-        throw new Error(`${response.status} Problem with getting data`);
-      const data = await response.json();
-      console.log(data);
-      setTotalCount(response.headers.get("X-Total-Count"));
-      const totalPageCount = Math.ceil(
-        response.headers.get("X-Total-Count") / controller.rowsPerPage
-      );
-      console.log("totalCount", totalCount);
-      setRecordList(data);
-      setPerPageCount(totalPageCount);
-      setVisible(false);
-    } catch (err) {
-      console.error(`${err.code} ${err.message} 💥`);
-      setApiError(`${err.code} ${err.message} 💥`);
-      setVisible(false);
-    }
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      try {
+        setVisible(true);
+        const response = await getRecordList(controller);
+        // console.log(response);
+        if (!response.ok)
+          throw new Error(`${response.status} Problem with getting data`);
+        const data = await response.json();
+        console.log(data);
+        // setTotalCount(response.headers.get("X-Total-Count"));
+        const totalPageCount = Math.ceil(
+          response.headers.get("X-Total-Count") / controller.rowsPerPage
+        );
+        // console.log("totalCount", totalCount);
+        setRecordList(data);
+        setPerPageCount(totalPageCount);
+        setVisible(false);
+      } catch (err) {
+        console.error(`${err.code} ${err.message} 💥`);
+        setApiError(`${err.code} ${err.message} 💥`);
+        setVisible(false);
+      }
+    };
     const debounce = setTimeout(() => {
       getData();
     }, 500);
@@ -64,25 +77,80 @@ const ListingPage = () => {
 
   const rows = recordList.map((item, index) => (
     <tr key={item.id}>
-      <td>{(index + 1).toString().padStart(2, "0")}</td>
-      <td>{item.product}</td>
-      <td>{item.components}</td>
-      <td>{item.category}</td>
-      <td>{item.type}</td>
-      <td>{item.topic}</td>
+      <td style={{ width: "5%" }}>{(index + 1).toString().padStart(2, "0")}</td>
+      <td style={{ width: "10%" }}>{item.product}</td>
+      <td style={{ width: "10%" }}>{item.components}</td>
+      <td style={{ width: "10%" }}>{item.category}</td>
+      <td style={{ width: "10%" }}>{item.type}</td>
+      <td style={{ width: "10%" }}>{item.topic}</td>
       <td>{item.description}</td>
-      <td>
-        <a href={item.docUrl} target="_blank" rel="noreferrer">
-          {item.docUrl}
-        </a>
+      <td
+        style={{
+          width: "10%",
+        }}
+      >
+        <Button
+          leftIcon={<ExternalLink size={14} />}
+          component="a"
+          target="_blank"
+          rel="noopener noreferrer"
+          href={item.docUrl}
+          variant="light"
+          color="blue"
+          fullWidth
+          title={item.docUrl}
+          style={{ marginTop: 14 }}
+        >
+          Document Link
+        </Button>
       </td>
     </tr>
   ));
+
+  const rows1 = recordList.map((item, index) => (
+    <Card shadow="sm" p="lg" mb="lg">
+      <Text>
+        <b>Product:</b> {item.product}
+      </Text>
+      <Text>
+        <b>components:</b> {item.components}
+      </Text>
+      <Text>
+        <b>category:</b> {item.category}
+      </Text>
+      <Text>
+        <b>type:</b> {item.type}
+      </Text>
+      <Text>
+        <b>topic:</b> {item.topic}
+      </Text>
+
+      <Text>
+        <b>Description:</b> {item.description}
+      </Text>
+
+      <Button
+        leftIcon={<ExternalLink size={14} />}
+        component="a"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={item.docUrl}
+        variant="light"
+        color="blue"
+        fullWidth
+        title={item.docUrl}
+        style={{ marginTop: 14 }}
+      >
+        Document Link
+      </Button>
+    </Card>
+  ));
+
   return (
     <Box component="div" maw={1200} mx="auto" pos="relative">
       <LoadingOverlay visible={visible} overlayBlur={2} />
       {apiError && apiError}
-      <Table mt="xl">
+      <Table mt="xl" striped>
         <thead>
           <tr>
             <th>Sr. no</th>
@@ -97,6 +165,7 @@ const ListingPage = () => {
         </thead>
         <tbody>{rows}</tbody>
       </Table>
+      {rows1}
       <Pagination
         position="center"
         mt="xl"
