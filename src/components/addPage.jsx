@@ -85,6 +85,8 @@ function AddPage() {
         color: "teal",
         msg: "User added successfully (submitted)",
       });
+      form.reset();
+      setContent("");
       setVisible(false);
     } catch (err) {
       setDisplayUserMsg({
