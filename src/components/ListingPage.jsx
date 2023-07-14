@@ -1,6 +1,6 @@
 import {
   Box,
-  Table,
+  Grid,
   LoadingOverlay,
   Pagination,
   Card,
@@ -109,24 +109,30 @@ const ListingPage = () => {
 
   const rows1 = recordList.map((item, index) => (
     <Card shadow="sm" p="lg" mb="lg">
+      <Grid>
+        <Grid.Col span={6}>
+          <Text>
+            <b>Product:</b> {item.product}
+          </Text>
+          <Text>
+            <b>components:</b> {item.components}
+          </Text>
+          <Text>
+            <b>category:</b> {item.category}
+          </Text>
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Text>
+            <b>type:</b> {item.type}
+          </Text>
+          <Text>
+            <b>topic:</b> {item.topic}
+          </Text>
+        </Grid.Col>
+      </Grid>
       <Text>
-        <b>Product:</b> {item.product}
-      </Text>
-      <Text>
-        <b>components:</b> {item.components}
-      </Text>
-      <Text>
-        <b>category:</b> {item.category}
-      </Text>
-      <Text>
-        <b>type:</b> {item.type}
-      </Text>
-      <Text>
-        <b>topic:</b> {item.topic}
-      </Text>
-
-      <Text>
-        <b>Description:</b> {item.description}
+        <b>Description:</b>
+        <div dangerouslySetInnerHTML={{ __html: item.description }} />
       </Text>
 
       <Button
@@ -150,7 +156,7 @@ const ListingPage = () => {
     <Box component="div" maw={1200} mx="auto" pos="relative">
       <LoadingOverlay visible={visible} overlayBlur={2} />
       {apiError && apiError}
-      <Table mt="xl" striped>
+      {/* <Table mt="xl" striped>
         <thead>
           <tr>
             <th>Sr. no</th>
@@ -164,7 +170,7 @@ const ListingPage = () => {
           </tr>
         </thead>
         <tbody>{rows}</tbody>
-      </Table>
+      </Table> */}
       {rows1}
       <Pagination
         position="center"

@@ -1,4 +1,5 @@
 import { useForm, isNotEmpty } from "@mantine/form";
+import JoditEditor from "jodit-react";
 
 import {
   LoadingOverlay,
@@ -8,14 +9,17 @@ import {
   Box,
   Space,
   Select,
-  Textarea,
+  Grid,
+  Input,
   Notification,
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function AddPage() {
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
   // const [submittedValues, setSubmittedValues] = useState("");
   const [visible, setVisible] = useState(false);
   const [displayUserMsg, setDisplayUserMsg] = useState({
@@ -52,7 +56,7 @@ function AddPage() {
       category: isNotEmpty("Enter category"),
       type: isNotEmpty("Enter type"),
       topic: isNotEmpty("Enter topic"),
-      description: isNotEmpty("Enter description"),
+      // description: isNotEmpty("Enter description"),
       docUrl: isNotEmpty("Enter docUrl"),
     },
 
@@ -62,7 +66,7 @@ function AddPage() {
       category: values.category,
       type: values.type,
       topic: values.topic,
-      description: values.description,
+      description: content,
       docUrl: values.docUrl,
     }),
   });
@@ -97,7 +101,7 @@ function AddPage() {
   return (
     <Box
       component="form"
-      maw={400}
+      maw={1200}
       mx="auto"
       pos="relative"
       onSubmit={form.onSubmit(onSubmit)}
@@ -115,73 +119,83 @@ function AddPage() {
         </>
       )}
       <LoadingOverlay visible={visible} overlayBlur={2} />
-      <Select
-        {...form.getInputProps("product")}
-        withAsterisk
-        label="Product"
-        placeholder="Select"
-        mt="md"
-        data={[
-          { value: "react", label: "React" },
-          { value: "ng", label: "Angular" },
-          { value: "svelte", label: "Svelte" },
-          { value: "vue", label: "Vue" },
-        ]}
-      />
-      <Select
-        {...form.getInputProps("components")}
-        withAsterisk
-        label="Components"
-        placeholder="Select"
-        mt="md"
-        data={[
-          { value: "react", label: "React" },
-          { value: "ng", label: "Angular" },
-          { value: "svelte", label: "Svelte" },
-          { value: "vue", label: "Vue" },
-        ]}
-      />
-      <Select
-        {...form.getInputProps("category")}
-        withAsterisk
-        label="Category"
-        placeholder="Select"
-        mt="md"
-        data={[
-          { value: "react", label: "React" },
-          { value: "ng", label: "Angular" },
-          { value: "svelte", label: "Svelte" },
-          { value: "vue", label: "Vue" },
-        ]}
-      />
-      <TextInput
-        label="Type"
-        placeholder="type"
-        withAsterisk
-        mt="md"
-        {...form.getInputProps("type")}
-      />
-      <TextInput
-        label="Topic"
-        placeholder="topic"
-        withAsterisk
-        mt="md"
-        {...form.getInputProps("topic")}
-      />
-      <Textarea
-        label="Description"
-        placeholder="description"
-        withAsterisk
-        mt="md"
-        {...form.getInputProps("description")}
-      />
-      <TextInput
-        label="Doc Url"
-        placeholder="docUrl"
-        withAsterisk
-        mt="md"
-        {...form.getInputProps("docUrl")}
-      />
+
+      <Grid>
+        <Grid.Col span={6}>
+          <Select
+            {...form.getInputProps("product")}
+            withAsterisk
+            label="Product"
+            placeholder="Select"
+            mt="md"
+            data={[
+              { value: "react", label: "React" },
+              { value: "ng", label: "Angular" },
+              { value: "svelte", label: "Svelte" },
+              { value: "vue", label: "Vue" },
+            ]}
+          />
+          <Select
+            {...form.getInputProps("components")}
+            withAsterisk
+            label="Components"
+            placeholder="Select"
+            mt="md"
+            data={[
+              { value: "react", label: "React" },
+              { value: "ng", label: "Angular" },
+              { value: "svelte", label: "Svelte" },
+              { value: "vue", label: "Vue" },
+            ]}
+          />
+          <Select
+            {...form.getInputProps("category")}
+            withAsterisk
+            label="Category"
+            placeholder="Select"
+            mt="md"
+            data={[
+              { value: "react", label: "React" },
+              { value: "ng", label: "Angular" },
+              { value: "svelte", label: "Svelte" },
+              { value: "vue", label: "Vue" },
+            ]}
+          />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <TextInput
+            label="Type"
+            placeholder="type"
+            withAsterisk
+            mt="md"
+            {...form.getInputProps("type")}
+          />
+          <TextInput
+            label="Topic"
+            placeholder="topic"
+            withAsterisk
+            mt="md"
+            {...form.getInputProps("topic")}
+          />
+          <TextInput
+            label="Doc Url"
+            placeholder="docUrl"
+            withAsterisk
+            mt="md"
+            {...form.getInputProps("docUrl")}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Input.Wrapper label="Description" mt="md">
+            <JoditEditor
+              height={800}
+              ref={editor}
+              value={content}
+              onChange={(newContent) => setContent(newContent)}
+            />
+          </Input.Wrapper>
+        </Grid.Col>
+      </Grid>
 
       <Group position="right" mt="md">
         <Button type="submit">Submit</Button>
