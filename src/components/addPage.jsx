@@ -131,7 +131,7 @@ function AddPage() {
             placeholder="Select"
             mt="md"
             data={[
-              { value: "react", label: "React" },
+              { value: "RTSP", label: "RTSP" },
               { value: "ng", label: "Angular" },
               { value: "svelte", label: "Svelte" },
               { value: "vue", label: "Vue" },
@@ -144,10 +144,14 @@ function AddPage() {
             placeholder="Select"
             mt="md"
             data={[
-              { value: "react", label: "React" },
-              { value: "ng", label: "Angular" },
-              { value: "svelte", label: "Svelte" },
-              { value: "vue", label: "Vue" },
+              { value: "Switch", label: "Switch" },
+              { value: "TOMAS", label: "TOMAS" },
+              { value: "BIG", label: "BIG" },
+              { value: "Admin Portal", label: "Admin Portal" },
+              { value: "Merchant Portal", label: "Merchant Portal" },
+              { value: "CBDC App", label: "CBDC App" },
+              { value: "NGINX", label: "NGINX" },
+              { value: "Bundle", label: "Bundle" },
             ]}
           />
           <Select
@@ -157,10 +161,48 @@ function AddPage() {
             placeholder="Select"
             mt="md"
             data={[
-              { value: "react", label: "React" },
-              { value: "ng", label: "Angular" },
-              { value: "svelte", label: "Svelte" },
-              { value: "vue", label: "Vue" },
+              { value: "react", label: "Test Cases" },
+              {
+                value: "Functional Requirement Document",
+                label: "Functional Requirement Document",
+              },
+              {
+                value: "svelte",
+                label: "Functional Requirement Specification",
+              },
+              {
+                value: "Business Requirement Specification",
+                label: "Business Requirement Specification",
+              },
+              {
+                value: "Requirement specific DOU",
+                label: "Requirement specific DOU",
+              },
+              { value: "Flowchat", label: "Flowchat" },
+              { value: "Activity Diagram", label: "Activity Diagram" },
+              { value: "Deployment Process", label: "Deployment Process" },
+              {
+                value: "Server Start / Stop Process",
+                label: "Server Start / Stop Process",
+              },
+              {
+                value: "Error and Response Codes",
+                label: "Error and Response Codes",
+              },
+              { value: "Release Notes", label: "Release Notes" },
+              { value: "Sequence Diagram", label: "Sequence Diagram" },
+              { value: "API Document", label: "API Document" },
+              { value: "API Collection", label: "API Collection" },
+              { value: "Environment Details", label: "Environment Details" },
+              {
+                value: "Success Transaction Logs",
+                label: "Success Transaction Logs",
+              },
+              {
+                value: "Testing Transaction Logs",
+                label: "Testing Transaction Logs",
+              },
+              { value: "Learning Document", label: "Learning Document" },
             ]}
           />
         </Grid.Col>
@@ -179,12 +221,20 @@ function AddPage() {
             mt="md"
             {...form.getInputProps("topic")}
           />
-          <TextInput
-            label="Doc Url"
-            placeholder="docUrl"
-            withAsterisk
-            mt="md"
+          <Select
             {...form.getInputProps("docUrl")}
+            withAsterisk
+            label="Doc For"
+            placeholder="Select"
+            mt="md"
+            data={[
+              { value: "Core", label: "Core" },
+              { value: "ICICI", label: "ICICI" },
+              { value: "IDFC", label: "IDFC" },
+              { value: "Yes Bank", label: "Yes Bank" },
+              { value: "SBI", label: "SBI" },
+              { value: "IndusInd", label: "IndusInd" },
+            ]}
           />
         </Grid.Col>
         <Grid.Col span={12}>
