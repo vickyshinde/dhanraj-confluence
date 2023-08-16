@@ -1,25 +1,36 @@
 import { useForm, isNotEmpty } from "@mantine/form";
-import JoditEditor from "jodit-react";
 
 import {
   LoadingOverlay,
   Button,
   Group,
   TextInput,
+  Text,
   Box,
   Space,
   Select,
   Grid,
   Input,
   Notification,
+  FileInput,
+  TypographyStylesProvider,
+  FileButton,
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import Editor from "../shared/Editor";
+
+import RichTextEditorComp from "../shared/RichTextEditor";
 
 function AddPage() {
-  const editor = useRef(null);
-  const [content, setContent] = useState("");
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const [editorState, setEditorState] = useState();
+
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
+
   // const [submittedValues, setSubmittedValues] = useState("");
   const [visible, setVisible] = useState(false);
   const [displayUserMsg, setDisplayUserMsg] = useState({
@@ -39,6 +50,7 @@ function AddPage() {
     });
   };
 
+  const form1 = "texts";
   const form = useForm({
     initialValues: {
       product: "",
@@ -48,13 +60,14 @@ function AddPage() {
       topic: "",
       description: "",
       docUrl: "",
+      file: null,
     },
 
     validate: {
       product: isNotEmpty("Enter product"),
       components: isNotEmpty("Enter components"),
       category: isNotEmpty("Enter category"),
-      type: isNotEmpty("Enter type"),
+      // type: isNotEmpty("Enter type"),
       topic: isNotEmpty("Enter topic"),
       // description: isNotEmpty("Enter description"),
       docUrl: isNotEmpty("Enter docUrl"),
@@ -66,8 +79,10 @@ function AddPage() {
       category: values.category,
       type: values.type,
       topic: values.topic,
-      description: content,
+      description: values.description,
+      // description: editorState,
       docUrl: values.docUrl,
+      file: File | null,
     }),
   });
 
@@ -75,7 +90,7 @@ function AddPage() {
     try {
       setVisible(true);
       const response = await addRecord(values);
-      // console.log(response);
+      console.log(response);
       if (!response.ok)
         throw new Error(`${response.status} Problem with getting data`);
       // console.log(data);
@@ -86,7 +101,7 @@ function AddPage() {
         msg: "User added successfully (submitted)",
       });
       form.reset();
-      setContent("");
+      setEditorState("");
       setVisible(false);
     } catch (err) {
       setDisplayUserMsg({
@@ -123,7 +138,7 @@ function AddPage() {
       <LoadingOverlay visible={visible} overlayBlur={2} />
 
       <Grid>
-        <Grid.Col span={6}>
+        <Grid.Col span={3}>
           <Select
             {...form.getInputProps("product")}
             withAsterisk
@@ -137,6 +152,8 @@ function AddPage() {
               { value: "vue", label: "Vue" },
             ]}
           />
+        </Grid.Col>
+        <Grid.Col span={3}>
           <Select
             {...form.getInputProps("components")}
             withAsterisk
@@ -154,6 +171,8 @@ function AddPage() {
               { value: "Bundle", label: "Bundle" },
             ]}
           />
+        </Grid.Col>
+        <Grid.Col span={3}>
           <Select
             {...form.getInputProps("category")}
             withAsterisk
@@ -206,21 +225,25 @@ function AddPage() {
             ]}
           />
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col span={3}>
           <TextInput
             label="Type"
             placeholder="type"
-            withAsterisk
+            // withAsterisk
             mt="md"
             {...form.getInputProps("type")}
           />
+        </Grid.Col>
+        <Grid.Col span={12}>
           <TextInput
-            label="Topic"
-            placeholder="topic"
+            label="Title"
+            placeholder="Title"
             withAsterisk
             mt="md"
             {...form.getInputProps("topic")}
           />
+        </Grid.Col>
+        <Grid.Col span={3}>
           <Select
             {...form.getInputProps("docUrl")}
             withAsterisk
@@ -237,15 +260,28 @@ function AddPage() {
             ]}
           />
         </Grid.Col>
+        {/* <Grid.Col span={3}>
+          <FileInput
+            mt="md"
+            placeholder="Pick file"
+            label="Upload File"
+            {...form.getInputProps("file  ")}
+          />
+        </Grid.Col> */}
+
         <Grid.Col span={12}>
           <Input.Wrapper label="Description" mt="md">
-            <JoditEditor
-              height={800}
-              ref={editor}
-              value={content}
-              onChange={(newContent) => setContent(newContent)}
-            />
+            <RichTextEditorComp name="description" form={form} />
+            {/* <Editor
+              name="description"
+              onChange={(data) => {
+                setEditorState(data);
+              }}
+              editorLoaded={editorLoaded}
+            /> */}
           </Input.Wrapper>
+
+          
         </Grid.Col>
       </Grid>
 

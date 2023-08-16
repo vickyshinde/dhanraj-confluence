@@ -10,6 +10,7 @@ import {
   TextInput,
   Select,
   useMantineTheme,
+  TypographyStylesProvider,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
@@ -19,6 +20,15 @@ import {
   ChevronDown,
   ChevronUp,
 } from "tabler-icons-react";
+import { generateHTML, JSONContent } from "@tiptap/core";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import SubScript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import TextAlign from "@tiptap/extension-text-align";
+import { Color } from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
 
 const ListingPage = () => {
   const theme = useMantineTheme();
@@ -137,18 +147,28 @@ const ListingPage = () => {
   const rows = recordList.map((item, index) => (
     <tr key={item.id}>
       <td style={{ width: "8%" }}>DCT-{item.id.toString().padStart(2, "0")}</td>
+      <td style={{ width: "auto" }}>{item.topic}</td>
       <td style={{ width: "10%" }}>{item.product}</td>
       <td style={{ width: "12%" }}>{item.components}</td>
-      <td style={{ width: "auto" }}>{item.category}</td>
+      <td style={{ width: "15%" }}>{item.category}</td>
       <td style={{ width: "10%" }}>{item.type}</td>
-      <td style={{ width: "10%" }}>{item.topic}</td>
-      <td>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: item.description.substring(0, 20),
-          }}
-        />
-      </td>
+      {/* <td>
+        <TypographyStylesProvider>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: generateHTML(item.description, [
+                StarterKit,
+                Underline,
+                Superscript,
+                SubScript,
+                Highlight,
+                Color,
+                TextStyle,
+              ]),
+            }}
+          />
+        </TypographyStylesProvider>
+      </td> */}
       <td
         style={{
           width: "10%",
@@ -180,51 +200,6 @@ const ListingPage = () => {
     </tr>
   ));
 
-  const rows1 = recordList.map((item, index) => (
-    <Card shadow="sm" p="lg" mb="lg">
-      <Grid>
-        <Grid.Col span={6}>
-          <Text>
-            <b>Product:</b> {item.product}
-          </Text>
-          <Text>
-            <b>components:</b> {item.components}
-          </Text>
-          <Text>
-            <b>category:</b> {item.category}
-          </Text>
-        </Grid.Col>
-        <Grid.Col span={6}>
-          <Text>
-            <b>type:</b> {item.type}
-          </Text>
-          <Text>
-            <b>topic:</b> {item.topic}
-          </Text>
-        </Grid.Col>
-      </Grid>
-      <Text>
-        <b>Description:</b>
-        <div dangerouslySetInnerHTML={{ __html: item.description }} />
-      </Text>
-
-      <Button
-        leftIcon={<ExternalLink size={14} />}
-        component="a"
-        target="_blank"
-        rel="noopener noreferrer"
-        href={item.docUrl}
-        variant="light"
-        color="blue"
-        fullWidth
-        title={item.docUrl}
-        style={{ marginTop: 14 }}
-      >
-        Document Link
-      </Button>
-    </Card>
-  ));
-
   return (
     <Box component="div" maw={1200} mx="auto" pos="relative">
       <Grid>
@@ -238,28 +213,6 @@ const ListingPage = () => {
             value={controller.searchInput}
           />
         </Grid.Col>
-        {/* <Grid.Col span={10}>
-          <Grid>
-            <Grid.Col span={2}>
-              <Select
-                withAsterisk
-                label="Components"
-                placeholder="Select"
-                mt="md"
-                data={[
-                  { value: "Switch", label: "Switch" },
-                  { value: "TOMAS", label: "TOMAS" },
-                  { value: "BIG", label: "BIG" },
-                  { value: "Admin Portal", label: "Admin Portal" },
-                  { value: "Merchant Portal", label: "Merchant Portal" },
-                  { value: "CBDC App", label: "CBDC App" },
-                  { value: "NGINX", label: "NGINX" },
-                  { value: "Bundle", label: "Bundle" },
-                ]}
-              />
-            </Grid.Col>
-          </Grid>
-        </Grid.Col> */}
       </Grid>
 
       <LoadingOverlay visible={visible} overlayBlur={2} />
@@ -276,7 +229,19 @@ const ListingPage = () => {
                   cursor: "pointer",
                 }}
               >
-                No1111{showActive("id")}
+                No{showActive("id")}
+              </Box>
+            </th>
+            <th onClick={() => sorting("topic")}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  cursor: "pointer",
+                }}
+              >
+                Title{showActive("topic")}
               </Box>
             </th>
             <th onClick={() => sorting("product")}>
@@ -327,25 +292,12 @@ const ListingPage = () => {
                 Type{showActive("type")}
               </Box>
             </th>
-            <th onClick={() => sorting("topic")}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  cursor: "pointer",
-                }}
-              >
-                Topic{showActive("topic")}
-              </Box>
-            </th>
-            <th>Description</th>
+
             <th>Action</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
       </Table>
-      {/* {rows1} */}
       <Pagination
         position="center"
         mt="xl"
